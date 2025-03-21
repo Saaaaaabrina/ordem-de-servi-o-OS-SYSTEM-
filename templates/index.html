@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordem de Serviço</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+    <img src="https://logodownload.org/wp-content/uploads/2014/09/google-logo-0-1536x1536.png" alt="Logo" class="logo">
+    </div>
+
+    <h1>Ordem de Serviço</h1>
+
+    <form action="{{ url_for('adicionar') }}" method="post">
+        <input type="text" name="cliente" placeholder="Nome do Cliente" required>
+        <input type="text" name="numero" placeholder="Número" required>
+        <input type="text" name="descricao" placeholder="Descrição do Serviço" required>
+        <input type="number" name="valor" placeholder="Valor (R$)" step="0.01" required>
+        <button type="submit">Adicionar OS</button>
+    </form>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Descrição</th>
+            <th>Status</th>
+            <th>Valor</th>
+            <th>Status</th>
+            <th>Açoes</th>
+            
+        </tr>
+        {% for os in ordens %}
+        <tr>
+            <td>{{ os[0] }}</td>
+            <td>{{ os[1] }}</td>
+            <td>{{ os[2] }}</td>
+            <td>{{ os[3] }}</td>
+            <td>{{ os[4] }}</td>
+            <td>
+                <form action="{{ url_for('atualizar', id=os[0]) }}" method="post">
+                    <select name="status">
+                        <option value="Aberto" {% if os[3] == "Aberto" %}selected{% endif %}>Aberto</option>
+                        <option value="Em andamento" {% if os[3] == "Em andamento" %}selected{% endif %}>Em andamento</option>
+                        <option value="Concluído" {% if os[3] == "Concluído" %}selected{% endif %}>Concluído</option>
+                    </select>
+                    <button type="submit">Atualizar</button>
+                </form>
+            </td>
+            <td>
+                <a href="{{ url_for('excluir', id=os[0]) }}" class="delete-btn">Excluir</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    
+</body>
+</html>
